@@ -1,0 +1,307 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #080b13;
+  color: white;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.topbar {
+  height: 65px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #101522;
+  border-bottom: 1px solid #252e40;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: #00e5a0;
+}
+
+.status {
+  font-size: 11px;
+  color: #ffbd4a;
+}
+
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 22px 16px;
+}
+
+.screen {
+  width: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.hero {
+  text-align: center;
+  margin: 35px 0 28px;
+}
+
+.cube-icon {
+  font-size: 65px;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: 35px;
+  letter-spacing: 2px;
+}
+
+.hero h1,
+.panel h2 {
+  color: #00e5a0;
+}
+
+.hero p {
+  color: #929bad;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.panel {
+  background: #121a29;
+  border: 1px solid #28344a;
+  border-radius: 18px;
+  padding: 24px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid #344157;
+  background: #080d17;
+  color: white;
+  outline: none;
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+input:focus {
+  border-color: #00e5a0;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: .15s;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+.primary,
+.secondary {
+  width: 100%;
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.primary {
+  background: #00e5a0;
+  color: #07120e;
+}
+
+.secondary {
+  background: #263249;
+  color: white;
+}
+
+button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.separator {
+  color: #7c899e;
+  font-size: 11px;
+  margin: 22px 0 10px;
+}
+
+#homeMessage {
+  color: #ff7676;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.room-code {
+  font-size: 36px;
+  font-weight: 900;
+  color: #00e5a0;
+  letter-spacing: 8px;
+  margin: 15px 0 25px;
+}
+
+.players {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.player-card {
+  background: #080e19;
+  border: 1px solid #28344a;
+  border-radius: 12px;
+  padding: 16px 5px;
+  min-width: 0;
+}
+
+.player-card span,
+.player-card strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.player-card span {
+  color: #8795aa;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+#lobbyMessage {
+  color: #a5b1c3;
+  font-size: 13px;
+  margin: 15px 0;
+}
+
+.battle-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  background: #121a29;
+  padding: 14px 8px;
+  border-radius: 12px;
+}
+
+.battle-player {
+  font-size: 10px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.battle-player strong {
+  display: block;
+  color: #00e5a0;
+  margin-top: 7px;
+}
+
+.timer {
+  font-size: 21px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+#cubeArea {
+  height: 310px;
+  margin: 12px 0;
+  background: radial-gradient(circle, #26354b, #0b101b 70%);
+  border-radius: 15px;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+#cube3d {
+  width: 100%;
+  height: 100%;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: #9ba9bd;
+  margin: 12px 2px;
+}
+
+#gameStatus {
+  color: #00e5a0;
+}
+
+.controls {
+  background: #121a29;
+  padding: 14px;
+  border-radius: 14px;
+}
+
+.control-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.control-row:last-child {
+  margin-bottom: 0;
+}
+
+.control-row button {
+  flex: 1;
+  padding: 14px 4px;
+  background: #26344b;
+  color: white;
+  font-size: 16px;
+}
+
+.bottom-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.bottom-actions button {
+  flex: 1;
+  padding: 13px 4px;
+  background: #202b3e;
+  color: white;
+  font-size: 11px;
+}
+
+.result-panel {
+  margin-top: 70px;
+}
+
+.trophy {
+  font-size: 70px;
+  margin-bottom: 15px;
+}
+
+.result-panel h1 {
+  color: #00e5a0;
+  margin-bottom: 12px;
+}
+
+.result-panel p {
+  color: #a6b1c2;
+}
+
+@media(max-width:360px) {
+  .timer { font-size: 17px; }
+  #cubeArea { height: 270px; }
+  .hero h1 { font-size: 28px; }
+}
