@@ -6,15 +6,14 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
+// Serve CubeBattle website files
+app.use(express.static(__dirname));
+
 const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
   }
-});
-
-app.get("/", (req, res) => {
-  res.send("CUBE BATTLE SERVER ONLINE");
 });
 
 const rooms = new Map();
@@ -71,7 +70,10 @@ function leaveRoom(socket) {
 
   if (!room) return;
 
-  room.players = room.players.filter(p => p.id !== socket.id);
+  room.players = room.players.filter(
+    p => p.id !== socket.id
+  );
+
   socket.leave(roomId);
 
   if (room.players.length === 0) {
@@ -81,6 +83,9 @@ function leaveRoom(socket) {
 
   room.hostId = room.players[0].id;
   room.started = false;
+  room.finished = false;
+  room.moves.clear();
+  room.rematchVotes.clear();
 
   io.to(roomId).emit("player-left", {
     players: getPlayers(room)
@@ -93,8 +98,11 @@ function leaveRoom(socket) {
 
 io.on("connection", socket => {
 
+  // CREATE ROOM
   socket.on("create-room", name => {
-    if (socket.data.roomId) leaveRoom(socket);
+    if (socket.data.roomId) {
+      leaveRoom(socket);
+    }
 
     const roomId = makeCode();
 
@@ -120,10 +128,15 @@ io.on("connection", socket => {
     });
   });
 
+  // JOIN ROOM
   socket.on("join-room", data => {
-    if (socket.data.roomId) leaveRoom(socket);
+    if (!data || !data.roomId) return;
 
-    const roomId = String(data.roomId || "").toUpperCase();
+    if (socket.data.roomId) {
+      leaveRoom(socket);
+    }
+
+    const roomId = String(data.roomId).toUpperCase();
     const room = rooms.get(roomId);
 
     if (!room) {
@@ -159,6 +172,7 @@ io.on("connection", socket => {
     });
   });
 
+  // START GAME
   socket.on("start-game", () => {
     const roomId = socket.data.roomId;
     const room = rooms.get(roomId);
@@ -180,27 +194,33 @@ io.on("connection", socket => {
     });
   });
 
+  // SYNC PLAYER MOVES
   socket.on("player-move", data => {
     const roomId = socket.data.roomId;
     const room = rooms.get(roomId);
 
     if (!room || !room.started || room.finished) return;
-    if (data.roomId !== roomId) return;
+    if (!data || data.roomId !== roomId) return;
 
     const allowed = /^[RLUDFB]'?$/;
+
+    if (typeof data.move !== "string") return;
     if (!allowed.test(data.move)) return;
 
-    const opponent = room.players.find(p => p.id !== socket.id);
+    const opponent = room.players.find(
+      p => p.id !== socket.id
+    );
+
     if (!opponent) return;
 
     io.to(opponent.id).emit("opponent-move", {
       move: data.move
     });
 
-    // Solved-state verification will be added
-    // before declaring a winner.
+    // Winner detection is not implemented yet.
   });
 
+  // REMATCH
   socket.on("rematch", () => {
     const roomId = socket.data.roomId;
     const room = rooms.get(roomId);
@@ -213,6 +233,7 @@ io.on("connection", socket => {
     if (room.rematchVotes.size === 2) {
       room.started = true;
       room.finished = false;
+      room.moves.clear();
       room.rematchVotes.clear();
 
       io.to(roomId).emit("rematch-start", {
@@ -221,10 +242,12 @@ io.on("connection", socket => {
     }
   });
 
+  // LEAVE ROOM
   socket.on("leave-room", () => {
     leaveRoom(socket);
   });
 
+  // DISCONNECT
   socket.on("disconnect", () => {
     leaveRoom(socket);
   });
@@ -233,5 +256,7 @@ io.on("connection", socket => {
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log("CUBE BATTLE running on port " + PORT);
+  console.log(
+    "CUBE BATTLE running on port " + PORT
+  );
 });
